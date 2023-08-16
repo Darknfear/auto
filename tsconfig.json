@@ -16,6 +16,22 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@configs/*": ["src/configurations/*"],
+      "@core/*": ["src/core/*"],
+      "@apps/*": ["src/apps/*"],
+      "@constants/*": ["src/commons/constants/*"],
+      "@decorators/*": ["src/commons/decorators/*"],
+      "@filters/*": ["src/commons/filters/*"],
+      "@guards/*": ["src/commons/guards/*"],
+      "@pipes/*": ["src/commons/pipes/*"],
+      "@middlewares/*": ["src/commons/middlewares/*"],
+      "@utilities/*": ["src/commons/utilities/*"],
+      "@entities/*": ["src/databases/entities/*"],
+      "@libs/*": ["src/libs/*"],
+      "@common/*": ["src/commons/*"]
+    }
+  },
+  "include": ["src/", "test/"]
 }
