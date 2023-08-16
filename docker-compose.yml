@@ -1,0 +1,41 @@
+version: 3.0.0
+
+networks:
+  app-network:
+    driver: bridge
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    networks:
+      - app-network
+    ports:
+      - 3001:3001
+    depends_on:
+      - db
+      - redis
+    links:
+      - db
+      - redis
+  db:
+    image: postgres:alpine3.18
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: auto_dev
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - /data/database:/var/lib/postgresql/data
+    networks:
+      - app-network
+    ports:
+      - 8001:5432
+  redis:
+    image: redis:6.2.13-alpine3.18
+    volumes:
+      - /data/redis:/redis/data
+    ports:
+      - 6789:6789
+
