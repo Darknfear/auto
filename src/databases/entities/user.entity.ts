@@ -1,6 +1,6 @@
 import { BaseEntityCustom } from '@common/base/base.entity';
 import { UserStatus } from '@constants/enum';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { Profile } from './profile.entity';
 
 @Entity('users')
@@ -14,7 +14,7 @@ export class User extends BaseEntityCustom {
   @Column()
   status: UserStatus;
 
-  @OneToOne(() => Profile)
+  @OneToMany(() => Profile, (profile) => profile.user)
   @JoinColumn()
-  profile: Profile;
+  profiles: Profile[];
 }

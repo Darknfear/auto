@@ -13,13 +13,14 @@ export class AddTableProfile1693032658905 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'varchar',
             isPrimary: true,
-            isNullable: false,
+            generationStrategy: 'uuid',
+            default: `uuid_generate_v4()`,
           },
           {
             name: 'user_id',
-            type: 'uuid',
+            type: 'varchar',
             isNullable: false,
           },
           {
