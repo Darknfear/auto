@@ -3,6 +3,7 @@ import { ConfigurationsService } from './configurations.service';
 
 class TypeORMConfig extends ConfigurationsService {
   get connectionSource() {
+    console.log(`env ${process.env.DB_NAME}`);
     return new DataSource({
       migrationsTableName: 'migrations',
       type: 'postgres',
@@ -13,7 +14,6 @@ class TypeORMConfig extends ConfigurationsService {
       database: process.env.DB_NAME,
       logging: false,
       synchronize: false,
-      name: 'default',
       entities: ['src/databases/entities/**.entity{.ts,.js}'],
       migrations: ['src/databases/migrations/**/*{.ts,.js}'],
       subscribers: ['src/databases/subscriber/**/*{.ts,.js}'],

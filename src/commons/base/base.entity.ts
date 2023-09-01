@@ -1,16 +1,21 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
-import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  BaseEntity,
+} from 'typeorm';
 
-export class BaseEntity {
-  @ApiResponseProperty()
-  @PrimaryGeneratedColumn()
-  id?: string;
+export class BaseEntityCustom extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @ApiResponseProperty()
   @CreateDateColumn({ name: 'created_at', nullable: true })
-  createdAt?: Date;
+  createdAt: Date;
 
-  @ApiResponseProperty()
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })
+  deletedAt: Date;
+
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
-  updatedAt?: Date;
+  updatedAt: Date;
 }
