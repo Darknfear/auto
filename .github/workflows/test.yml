@@ -1,0 +1,15 @@
+
+name: Test the application
+on: [pull_request]
+env:
+  IMAGE_TAG: nestjs-api
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+ 
+      - name: Print after actions/checkout
+        uses: Echo "Checkout github actions/checkout"
