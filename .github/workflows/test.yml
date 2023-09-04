@@ -11,4 +11,4 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
  
-      - run: Echo "Hello github actions/checkout"
+      - run: echo "Hello github actions/checkout"
