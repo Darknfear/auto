@@ -1,8 +1,15 @@
-import { genSalt, hash } from 'bcrypt';
+import { genSalt, hash, compare } from 'bcrypt';
 
 export const hashPassword = async (password: string) => {
   const salt = await genSalt(10);
   return await hash(password, salt);
+};
+
+export const comparePassword = async (
+  password: string,
+  hash: string,
+): Promise<boolean> => {
+  return compare(password, hash);
 };
 
 export const generateTokenVerifyPractitioner = (data: {

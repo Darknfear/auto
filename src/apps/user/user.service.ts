@@ -5,6 +5,8 @@ import { DataSource, EntityManager } from 'typeorm';
 import { hashPassword } from '@utilities/account-utils';
 import { Profile } from '@entities/profile.entity';
 import { UserStatus } from '@constants/enum';
+import { plainToInstance } from 'class-transformer';
+import { MeResponseDto } from './dtos/response/me-response.dto';
 
 @Injectable()
 export class UserService {
@@ -43,5 +45,25 @@ export class UserService {
       ]);
     });
     return { id: user.id };
+  }
+
+  async getMe(email: string) {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+      relations: ['profiles'],
+    });
+    if (!user) {
+      throw new BadRequestException('User not found!');
+    }
+
+    if (user.status === UserStatus.PENDING) {
+      throw new BadRequestException('User not active!');
+    }
+
+    return plainToInstance(MeResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 }
