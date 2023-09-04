@@ -11,5 +11,4 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
  
-      - name: Print after actions/checkout
-        uses: Echo "Checkout github actions/checkout"
+      - run: Echo "Hello github actions/checkout"
