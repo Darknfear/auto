@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Api docs')
     .setDescription('Demo API Application')
     .setVersion('v1')
+    .addBearerAuth()
     .build();
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidationPipe());
