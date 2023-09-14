@@ -2,9 +2,18 @@ import { UserRepository } from '@apps/user/user.repository';
 import { UserService } from '@apps/user/user.service';
 import { JwtPayload } from '@common/interfaces/jwt.interface';
 import { ProfileRole, UserStatus } from '@constants/enum';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { comparePassword } from '@utilities/account-utils';
+import { RegisterRequestDto } from './dtos/request/register-request.dto';
+import { ERROR_MESSAGES } from '@constants/message';
+import { plainToInstance } from 'class-transformer';
+import { LoginDtoResponse } from './dtos/response/login.reponse.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,12 +23,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createUser(payload: {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }) {
+  async createUser(payload: RegisterRequestDto) {
     return this.userService.create(payload);
   }
 
@@ -29,16 +33,25 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new BadRequestException('User not found!');
+      throw new HttpException(
+        ERROR_MESSAGES.ACCOUNT_NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     if (user.status === UserStatus.PENDING) {
-      throw new BadRequestException('User not active!');
+      throw new HttpException(
+        ERROR_MESSAGES.ACCOUNT_NOT_ACTIVE,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
-      throw new BadRequestException('Info incorrect!');
+      throw new HttpException(
+        ERROR_MESSAGES.INFO_NOT_CORRECT,
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const jwtPayload: JwtPayload = {
       email: user.email,
@@ -46,7 +59,10 @@ export class AuthService {
       role: ProfileRole.USER,
     };
     const token = this.signJwt(jwtPayload);
-    return { id: user.id, accessToken: token };
+    return plainToInstance(LoginDtoResponse, {
+      accessToken: token,
+      id: user.id,
+    });
   }
 
   private signJwt(payload: JwtPayload) {

@@ -1,9 +1,15 @@
-import { AuthService } from '@apps/auth/auth.service';
 import { IsAuthGuard } from '@guards/jwt-auth.guard';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CustomRequest } from '@common/interfaces/request.interface';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { MeResponseDto } from './dtos/response/me-response.dto';
+import { ApiException } from '@common/interfaces/api-exception';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -13,6 +19,9 @@ export class UserController {
 
   @UseGuards(IsAuthGuard)
   @Get('me')
+  @ApiOperation({ summary: 'Get info user' })
+  @ApiResponse({ status: HttpStatus.OK, type: MeResponseDto })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ApiException })
   async getMe(@Req() req: CustomRequest) {
     const { user } = req;
     return await this.userService.getMe(user.email);
