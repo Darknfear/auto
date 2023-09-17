@@ -12,3 +12,8 @@ export enum ProfileRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
+
+export enum TokenType {
+  VERIFY_ACCOUNT = 'VERIFY_ACCOUNT',
+  FORGOT_PASSWORD = 'FORGOT_PASSWORD',
+}

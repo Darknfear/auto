@@ -65,6 +65,10 @@ export class AuthService {
     });
   }
 
+  async updateProfile() {
+    return;
+  }
+
   private signJwt(payload: JwtPayload) {
     return this.jwtService.sign(payload);
   }
