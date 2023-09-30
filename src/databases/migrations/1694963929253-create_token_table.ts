@@ -24,6 +24,12 @@ export class CreateTokenTable1694963929253 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'type',
+            type: 'enum',
+            enum: ['VERIFY_ACCOUNT', 'FORGOT_PASSWORD'],
+            default: `'VERIFY_ACCOUNT'`,
+          },
+          {
             name: 'created_at',
             type: 'varchar',
             default: `CURRENT_TIMESTAMP`,

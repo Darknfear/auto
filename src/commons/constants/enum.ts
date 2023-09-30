@@ -17,3 +17,8 @@ export enum TokenType {
   VERIFY_ACCOUNT = 'VERIFY_ACCOUNT',
   FORGOT_PASSWORD = 'FORGOT_PASSWORD',
 }
+
+export enum ProfileType {
+  EMAIL = 'EMAIL',
+  GOOGLE = 'GOOGLE',
+}

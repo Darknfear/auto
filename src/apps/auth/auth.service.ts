@@ -2,26 +2,23 @@ import { UserRepository } from '@apps/user/user.repository';
 import { UserService } from '@apps/user/user.service';
 import { JwtPayload } from '@common/interfaces/jwt.interface';
 import { ProfileRole, UserStatus } from '@constants/enum';
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { comparePassword } from '@utilities/account-utils';
 import { RegisterRequestDto } from './dtos/request/register-request.dto';
 import { ERROR_MESSAGES } from '@constants/message';
 import { plainToInstance } from 'class-transformer';
 import { LoginDtoResponse } from './dtos/response/login.reponse.dto';
-
+import { Auth, google } from 'googleapis';
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly userService: UserService,
-    private readonly userRepository: UserRepository,
-    private readonly jwtService: JwtService,
-  ) {}
+  private googleOAuthClient: Auth.OAuth2Client;
+  constructor(private readonly userService: UserService, private readonly userRepository: UserRepository, private readonly jwtService: JwtService) {
+    this.googleOAuthClient = new google.auth.OAuth2({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    });
+  }
 
   async createUser(payload: RegisterRequestDto) {
     return this.userService.create(payload);
@@ -33,25 +30,16 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new HttpException(
-        ERROR_MESSAGES.ACCOUNT_NOT_FOUND,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(ERROR_MESSAGES.ACCOUNT_NOT_FOUND, HttpStatus.BAD_REQUEST);
     }
 
     if (user.status === UserStatus.PENDING) {
-      throw new HttpException(
-        ERROR_MESSAGES.ACCOUNT_NOT_ACTIVE,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(ERROR_MESSAGES.ACCOUNT_NOT_ACTIVE, HttpStatus.BAD_REQUEST);
     }
 
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
-      throw new HttpException(
-        ERROR_MESSAGES.INFO_NOT_CORRECT,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(ERROR_MESSAGES.INFO_NOT_CORRECT, HttpStatus.BAD_REQUEST);
     }
     const jwtPayload: JwtPayload = {
       email: user.email,

@@ -1,5 +1,5 @@
 import { BaseEntityCustom } from '@common/base/base.entity';
-import { ProfileRole, ProfileStatus } from '@constants/enum';
+import { ProfileRole, ProfileStatus, ProfileType } from '@constants/enum';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 
@@ -23,13 +23,16 @@ export class Profile extends BaseEntityCustom {
   @Column()
   role: ProfileRole;
 
+  @Column({ name: 'type', nullable: false, type: 'enum', enum: ProfileType })
+  type: ProfileType;
+
   @Column()
   status: ProfileStatus;
 
   @Column({ type: 'uuid', nullable: false, name: 'user_id' })
   userId: string;
 
-  @ManyToOne(() => User, (user) => user.profiles)
+  @ManyToOne(() => User, user => user.profiles)
   @JoinColumn({ name: 'user_id' })
   user: User;
 }
