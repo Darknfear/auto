@@ -4,7 +4,6 @@ import { ConfigurationsService } from './configurations.service';
 
 class DatabaseConfig extends ConfigurationsService {
   get config(): TypeOrmModuleOptions {
-    console.log(`env ${process.env.DB_HOST}`);
     return {
       type: 'postgres',
       host: process.env.DB_HOST,

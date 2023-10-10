@@ -4,21 +4,21 @@ networks:
   app-network:
     driver: bridge
 services:
-  app:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    restart: always
-    networks:
-      - app-network
-    ports:
-      - 3001:3001
-    depends_on:
-      - db
-      - redis
-    links:
-      - db
-      - redis
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile
+  #   restart: always
+  #   networks:
+  #     - app-network
+  #   ports:
+  #     - 3001:3001
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   links:
+  #     - db
+  #     - redis
   db:
     image: postgres:alpine3.18
     restart: always
